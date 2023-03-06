@@ -18,6 +18,7 @@ type Student = {
 
 const Home = () => {
   const navigation = useNavigation();
+  const [studentObj, setStudentObj] = React.useState({});
   const [students, setStudents] = React.useState([]);
   const [studentName, setStudentName] = React.useState("");
   const [studentAddress, setStudentAddress] = React.useState("");
@@ -25,6 +26,12 @@ const Home = () => {
   const [studentcourse, setStudentcourse] = React.useState("");
   const [studentimage, setStudentimage] = React.useState("");
   const [studentID, setStudentID] = React.useState(0);
+
+  const [studentNameUdate, setStudentNameUdate] = React.useState("");
+  const [studentAddressUdate, setStudentAddressUdate] = React.useState("");
+  const [registrationDateUdate, setRegistrationDateUdate] = React.useState("");
+  const [studentcourseUdate, setStudentcourseUdate] = React.useState("");
+  const [studentimageUdate, setStudentimageUdate] = React.useState("");
 
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
@@ -47,7 +54,8 @@ const Home = () => {
     try {
       const response = await fetch('http://192.168.1.3:3000/api/v1/student/');
       const json = await response.json();
-      await setStudents(json);
+      setStudents([]);
+      setStudents(json);
     } catch (error) {
       console.error(error);
     } finally {
@@ -59,16 +67,16 @@ const Home = () => {
   }, []);
 
 
-  const saveStudent = () => {
-    fetch('http://192.168.1.3:3000/api/v1/student/', {
-      method: 'POST',
+  const updateStudent = () => {
+    fetch(`http://192.168.1.3:3000/api/v1/student/${studentObj.std_id}`, {
+      method: 'PUT',
       body: JSON.stringify({
-        std_id: 0,
-        name: studentName,
-        address: studentAddress,
-        registered_date: registrationDate,
-        course: studentcourse,
-        image: studentimage
+        std_id: studentObj.std_id,
+        name: studentObj.name,
+        address: studentObj.address,
+        registered_date: studentObj.registered_date,
+        course: studentObj.course,
+        image: studentObj.image
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -81,12 +89,6 @@ const Home = () => {
   }
 
   const deleteStudent = () => {
-    // fetch(`http://192.168.1.3:3000/api/v1/student/${studentID}`, {
-    //   method: 'DELETE',
-    // })
-    //   .then((response) => response.json())
-    //   .then((json) => JSON.stringify(json));
-
     fetch(`http://192.168.1.3:3000/api/v1/student/${studentID}`, {
       method: "DELETE",
       headers: {
@@ -95,13 +97,26 @@ const Home = () => {
       },
     })
       .then((responseData) => {
-        //console.log(JSON.stringify(responseData));
-        //console.log(responseData.status);
         if (responseData.status == '200') {
           setvisibleDialog(false);
           GetAllStudents();
         }
       });
+  }
+
+  const GetStudentByID = async (studentIDPrm) => {
+    fetch(`http://192.168.1.3:3000/api/v1/student/${studentIDPrm}`)
+      .then((response) => response.json())
+      .then((json) => {
+        setStudentObj(json);
+        setStudentName(json.name);
+      });
+  }
+
+  const clickUpdateStudent = (studentID) => {
+    console.log(studentID);
+    GetStudentByID(studentID);
+    showModal();
   }
 
   return (
@@ -136,8 +151,8 @@ const Home = () => {
               key={student.std_id}
               title={student.name}
               description={student.address}
-              left={props => <TouchableOpacity><Avatar.Text size={40} label={student.name.substring(0, 2).toUpperCase()} /></TouchableOpacity>}
-              right={props => <TouchableOpacity style={styles.deleteBtn} onPress={() => showDialog(student.std_id)}><MaterialCommunityIcons name="delete-circle" color={COLORS.bootstrapDanger} size={40}/></TouchableOpacity>}
+              left={props => <TouchableOpacity onPress={() => clickUpdateStudent(student.std_id)}><Avatar.Text size={40} label={student.name.substring(0, 2).toUpperCase()} /></TouchableOpacity>}
+              right={props => <TouchableOpacity onPress={() => showDialog(student.std_id)}><MaterialCommunityIcons name="delete-circle" color={COLORS.bootstrapDanger} size={40} /></TouchableOpacity>}
             />
           ))}
 
@@ -147,32 +162,36 @@ const Home = () => {
           <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modelContainerStyle}>
 
             <Appbar.Header style={styles.appBar}>
-              <Appbar.Content title="Add new student" style={styles.cardTitle} />
+              <Appbar.Content title="Update student" style={styles.cardTitle} />
             </Appbar.Header>
 
             <TextInput style={styles.addStudentModelTxt}
               label="Name"
               mode='outlined'
-              onChangeText={text => setStudentName(text)}
+              value={studentObj.name}
+              onChangeText={text => setStudentObj({...studentObj, name : text})}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Address"
               mode='outlined'
-              onChangeText={text => setStudentAddress(text)}
+              value={studentObj.address}
+              onChangeText={text => setStudentObj({...studentObj, address: text})}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Registered Date"
               mode='outlined'
-              onChangeText={text => setRegistrationDate(text)}
+              value={studentObj.registered_date}
+              onChangeText={text => setStudentObj({...studentObj, registrationDate: text})}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Course"
+              value={studentObj.course}
               mode='outlined'
-              onChangeText={text => setStudentcourse(text)}
+              onChangeText={text => setStudentObj({...studentObj, course: text})}
             />
 
-            <Button icon="content-save" mode="contained" style={styles.addStudentBtn} onPress={saveStudent}>
-              Save
+            <Button icon="content-save" mode="contained" style={styles.addStudentBtn} onPress={updateStudent}>
+              Update
             </Button>
 
           </Modal>
@@ -232,7 +251,7 @@ const styles = StyleSheet.create({
   },
   studentListArea: {
     flex: 0.9,
-    marginTop:'2%',
+    marginTop: '2%',
     marginLeft: '3%'
   },
   modelContainerStyle: {
@@ -255,9 +274,6 @@ const styles = StyleSheet.create({
     margin: '2%',
     marginTop: '3%',
     backgroundColor: COLORS.bootstrapPrimary,
-  },
-  deleteBtn: {
-    
   },
   appBar: {
     backgroundColor: COLORS.titleBarAddStudent,

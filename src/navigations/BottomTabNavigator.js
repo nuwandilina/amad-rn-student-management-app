@@ -8,6 +8,7 @@ import SettingsNavigator from './SettingsNavigator';
 import CustomTabBarButton from '../components/CustomTabBarButton';
 import CustomTabBar from '../components/CustomTabBar';
 import { useNavigation } from '@react-navigation/native';
+import AddStudent from '../screens/home/AddStudent';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,6 +38,22 @@ function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
+        name={ROUTES.ADD_STUDENT}
+        component={AddStudent}
+        options={{
+          tabBarIcon: ({ }) => (
+            <MaterialCommunityIcons name="account-multiple-plus" color={COLORS.black} size={30} />
+          ),
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => navigation.openDrawer()} style={styles.menuStyle}>
+                <MaterialCommunityIcons name="menu" color={COLORS.black} size={30} />
+              </TouchableOpacity>
+            );
+          },
+        }}
+      />
+      <Tab.Screen
         name={ROUTES.NOTIFICATIONS}
         component={Notifications}
         options={{
@@ -52,7 +69,7 @@ function BottomTabNavigator() {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={ROUTES.SETTINGS_NAVIGATOR}
         component={Settings}
         options={{
@@ -67,7 +84,7 @@ function BottomTabNavigator() {
             );
           },
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

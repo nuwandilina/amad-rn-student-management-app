@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
+  Text,
   View,
   SafeAreaView,
   TouchableOpacity
@@ -9,26 +10,67 @@ import LinearGradient from 'react-native-linear-gradient';
 import { COLORS, ROUTES } from '../../constants';
 import Logo from '../../assets/icons/LOGO.svg';
 import { useNavigation } from '@react-navigation/native';
-import { Modal, Portal, Text, Button, Provider } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
 const AddStudent = props => {
-  const [visible, setVisible] = React.useState(false);
-
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: 'white', padding: 20 };
 
   return (
-    <Provider>
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-          <Text>Example Modal.  Click outside this area to dismiss.</Text>
-        </Modal>
-      </Portal>
-      <Button style={{ marginTop: 30 }} onPress={showModal}>
-        Show
-      </Button>
-    </Provider>
+    <SafeAreaView style={styles.main}>
+      <View style={styles.txtContainer}>
+        <TextInput style={styles.input}
+          label="username"
+          mode="outlined"
+          onChangeText={text => setUserName(text)}
+          right={<TextInput.Icon icon="account-circle" />}
+        />
+
+        <TextInput style={styles.input}
+          label="Password"
+          mode="outlined"
+          secureTextEntry
+          onChangeText={text => setPassword(text)}
+          right={<TextInput.Icon icon="eye" />}
+        />
+
+        <TextInput style={styles.input}
+          label="username"
+          mode="outlined"
+          onChangeText={text => setUserName(text)}
+          right={<TextInput.Icon icon="account-circle" />}
+        />
+
+        <TextInput style={styles.input}
+          label="Password"
+          mode="outlined"
+          secureTextEntry
+          onChangeText={text => setPassword(text)}
+          right={<TextInput.Icon icon="eye" />}
+        />
+
+        <View style={styles.loginBtnWrapper}>
+          <LinearGradient
+            colors={[COLORS.gradientForm, COLORS.primary]}
+            style={styles.linearGradient}
+            start={{ y: 0.0, x: 0.0 }}
+            end={{ y: 1.0, x: 0.0 }}>
+            {/******************** LOGIN BUTTON *********************/}
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.loginBtn}>
+              <Text style={styles.loginText}>Log In</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+
+      </View>
+
+      <View style={styles.bottomContainer}>
+
+      </View>
+
+
+
+    </SafeAreaView>
   );
 };
 
@@ -37,48 +79,19 @@ export default AddStudent;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    flexDirection: 'column',
+    backgroundColor: COLORS.white,
   },
-  container: {
-    padding: 15,
-    width: '100%',
-    position: 'relative',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  txtContainer: {
+    flex: 0.8,
+    margin: '5%'
   },
-  brandName: {
-    fontSize: 42,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    opacity: 0.9,
+  bottomContainer: {
+    flex: 0.2,
+    flexDirection: 'column',
   },
-  loginContinueTxt: {
-    fontSize: 21,
-    textAlign: 'center',
-    color: COLORS.gray,
-    marginBottom: 16,
-    fontWeight: 'bold',
-  },
-  input: {
-    // borderWidth: 1,
-    // borderColor: COLORS.grayLight,
-    // padding: 15,
-    // marginVertical: 10,
-    // borderRadius: 5,
-    // height: 55,
-    // paddingVertical: 0,
-    marginVertical: 5,
-    borderTopLeftRadius: 10,
-    borderTopEndRadius: 10,
-  },
-  // Login Btn Styles
   loginBtnWrapper: {
     height: 55,
-    marginTop: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -87,6 +100,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 3,
     elevation: 5,
+    margin:'5%'
   },
   linearGradient: {
     width: '100%',
@@ -103,38 +117,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '400',
-  },
-  forgotPassText: {
-    color: COLORS.primary,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  // footer
-  footer: {
-    position: 'absolute',
-    bottom: 20,
-    textAlign: 'center',
-    flexDirection: 'row',
-  },
-  footerText: {
-    color: COLORS.gray,
-    fontWeight: 'bold',
-  },
-  signupBtn: {
-    color: COLORS.primary,
-    fontWeight: 'bold',
-  },
-  // utils
-  wFull: {
-    width: '100%',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mr7: {
-    alignItems: 'center',
   },
 });

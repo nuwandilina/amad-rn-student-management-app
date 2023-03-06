@@ -20,5 +20,5 @@ export default {
   SETTINGS_DETAIL: 'Settings Detail',
   PROFILE: 'My Profile',
 
-  ADD_STUDENT: 'Add New Student' , 
+  ADD_STUDENT: 'Add Student' , 
 };

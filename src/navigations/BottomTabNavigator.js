@@ -22,9 +22,10 @@ function BottomTabNavigator() {
       inactiveColor={COLORS.danger}
     >
       <Tab.Screen
-        name={ROUTES.HOME_TAB}
+        name={"Home"}
         component={Home}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ }) => (
             <MaterialCommunityIcons name="home" color={COLORS.black} size={30} />
           ),
@@ -38,9 +39,10 @@ function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
-        name={ROUTES.ADD_STUDENT}
+        name={"AddStudent"}
         component={AddStudent}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ }) => (
             <MaterialCommunityIcons name="account-multiple-plus" color={COLORS.black} size={30} />
           ),

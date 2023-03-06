@@ -5,7 +5,7 @@ import { TextInput, List, MD3Colors, Avatar, Modal, Portal, Text, Button, Provid
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-
+import { useNavigation } from '@react-navigation/native';
 
 type Student = {
   std_id: int,
@@ -17,7 +17,7 @@ type Student = {
 }
 
 const Home = () => {
-
+  const navigation = useNavigation();
   const [students, setStudents] = React.useState([]);
   const [studentName, setStudentName] = React.useState("");
   const [studentAddress, setStudentAddress] = React.useState("");
@@ -28,7 +28,8 @@ const Home = () => {
 
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
-    setVisible(true);
+    //setVisible(true);
+    navigation.navigate('AddStudent')
   };
   const hideModal = () => {
     setVisible(false)
@@ -96,7 +97,7 @@ const Home = () => {
     })
       .then((responseData) => {
         //console.log(JSON.stringify(responseData));
-        console.log(responseData.status);
+        //console.log(responseData.status);
         if (responseData.status == '200') {
           setvisibleDialog(false);
           GetAllStudents();
@@ -180,12 +181,12 @@ const Home = () => {
 
         <Portal>
           <Dialog visible={visibleDialog} onDismiss={hideDialog}>
-            {/* <Dialog.Title>Alert</Dialog.Title> */}
+            <Dialog.Icon icon="chat-question" size={30} color={ COLORS.danger} />
             <Dialog.Content>
-              <Text variant="bodyMedium">Are you sure you want to delete this student ?</Text>
+              <Text variant="bodyLarge">Are you sure you want to delete this student ?</Text>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={deleteStudent}>Yes</Button>
+              <Button onPress={deleteStudent}><Text style={{ color: COLORS.danger }}>Yes</Text></Button>
               <Button onPress={hideDialog}>No</Button>
             </Dialog.Actions>
           </Dialog>

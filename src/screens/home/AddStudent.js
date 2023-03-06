@@ -10,67 +10,111 @@ import LinearGradient from 'react-native-linear-gradient';
 import { COLORS, ROUTES } from '../../constants';
 import Logo from '../../assets/icons/LOGO.svg';
 import { useNavigation } from '@react-navigation/native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Provider, Portal, Dialog, Button } from 'react-native-paper';
 
 const AddStudent = props => {
+  const navigation = useNavigation();
+  const [studentName, setStudentName] = React.useState("");
+  const [studentAddress, setStudentAddress] = React.useState("");
+  const [registrationDate, setRegistrationDate] = React.useState("");
+  const [studentcourse, setStudentcourse] = React.useState("");
+  const [studentimage, setStudentimage] = React.useState("");
+
+  const [visibleDialog, setvisibleDialog] = React.useState(false);
+  const showDialog = () => {
+    setvisibleDialog(true)
+  };
+  const hideDialog = () => {
+    setvisibleDialog(false)
+  };
+
+  const saveStudent = () => {
+    fetch('http://192.168.1.3:3000/api/v1/student/', {
+      method: 'POST',
+      body: JSON.stringify({
+        std_id: 0,
+        name: studentName,
+        address: studentAddress,
+        registered_date: registrationDate,
+        course: studentcourse,
+        image: studentimage
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((responseData) => {
+        if (responseData.status == '200') {
+          showDialog();
+        }
+      });
+  }
+
+  const clearForm = () => {
+    navigation.navigate('Home');
+  }
 
   return (
-    <SafeAreaView style={styles.main}>
-      <View style={styles.txtContainer}>
-        <TextInput style={styles.input}
-          label="username"
-          mode="outlined"
-          onChangeText={text => setUserName(text)}
-          right={<TextInput.Icon icon="account-circle" />}
-        />
+    <Provider>
+      <SafeAreaView style={styles.main}>
+        <View style={styles.txtContainer}>
+          <TextInput style={styles.txtBox}
+            label="Name"
+            mode='outlined'
+            onChangeText={text => setStudentName(text)}
+          />
+          <TextInput style={styles.txtBox}
+            label="Address"
+            mode='outlined'
+            onChangeText={text => setStudentAddress(text)}
+          />
+          <TextInput style={styles.txtBox}
+            label="Registered Date"
+            mode='outlined'
+            onChangeText={text => setRegistrationDate(text)}
+          />
+          <TextInput style={styles.txtBox}
+            label="Course"
+            mode='outlined'
+            onChangeText={text => setStudentcourse(text)}
+          />
 
-        <TextInput style={styles.input}
-          label="Password"
-          mode="outlined"
-          secureTextEntry
-          onChangeText={text => setPassword(text)}
-          right={<TextInput.Icon icon="eye" />}
-        />
+          <View style={styles.loginBtnWrapper}>
+            <LinearGradient
+              colors={[COLORS.gradientForm, COLORS.primary]}
+              style={styles.linearGradient}
+              start={{ y: 0.0, x: 0.0 }}
+              end={{ y: 1.0, x: 0.0 }}>
+              {/******************** LOGIN BUTTON *********************/}
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={saveStudent}
+                style={styles.loginBtn}>
+                <Text style={styles.loginText}>Save</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
 
-        <TextInput style={styles.input}
-          label="username"
-          mode="outlined"
-          onChangeText={text => setUserName(text)}
-          right={<TextInput.Icon icon="account-circle" />}
-        />
-
-        <TextInput style={styles.input}
-          label="Password"
-          mode="outlined"
-          secureTextEntry
-          onChangeText={text => setPassword(text)}
-          right={<TextInput.Icon icon="eye" />}
-        />
-
-        <View style={styles.loginBtnWrapper}>
-          <LinearGradient
-            colors={[COLORS.gradientForm, COLORS.primary]}
-            style={styles.linearGradient}
-            start={{ y: 0.0, x: 0.0 }}
-            end={{ y: 1.0, x: 0.0 }}>
-            {/******************** LOGIN BUTTON *********************/}
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.loginBtn}>
-              <Text style={styles.loginText}>Log In</Text>
-            </TouchableOpacity>
-          </LinearGradient>
         </View>
 
-      </View>
+        <View style={styles.bottomContainer}>
 
-      <View style={styles.bottomContainer}>
+        </View>
 
-      </View>
+        <Portal>
+          <Dialog visible={visibleDialog} onDismiss={hideDialog}>
+            <Dialog.Icon icon="check-circle" size={30} color={ COLORS.bootstrapSuccess} />
+            <Dialog.Content>
+              <Text variant="bodyLarge">Student successfully saved</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => clearForm()}>Ok</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
 
-
-
-    </SafeAreaView>
+      </SafeAreaView>
+    </Provider>
   );
 };
 
@@ -100,7 +144,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 3,
     elevation: 5,
-    margin:'5%'
+    margin: '5%'
   },
   linearGradient: {
     width: '100%',
@@ -117,5 +161,9 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     fontWeight: '400',
+  },
+  txtBox: {
+    borderRadius: 10,
+    width: '100%',
   },
 });

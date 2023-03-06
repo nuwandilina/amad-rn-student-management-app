@@ -28,8 +28,7 @@ const Home = () => {
 
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
-    //setVisible(true);
-    navigation.navigate('AddStudent')
+    setVisible(true);
   };
   const hideModal = () => {
     setVisible(false)
@@ -123,7 +122,7 @@ const Home = () => {
             {/******************** LOGIN BUTTON *********************/}
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={showModal}
+              onPress={() => navigation.navigate('AddStudent')}
             >
               <MaterialCommunityIcons name="plus" color={COLORS.white} size={30} />
             </TouchableOpacity>
@@ -137,8 +136,8 @@ const Home = () => {
               key={student.std_id}
               title={student.name}
               description={student.address}
-              left={props => <Avatar.Text size={40} label={student.name.substring(0, 2).toUpperCase()} />}
-              right={props => <MaterialCommunityIcons name="delete-circle" color={COLORS.bootstrapDanger} size={40} style={styles.deleteBtn} onPress={() => showDialog(student.std_id)} />}
+              left={props => <TouchableOpacity><Avatar.Text size={40} label={student.name.substring(0, 2).toUpperCase()} /></TouchableOpacity>}
+              right={props => <TouchableOpacity style={styles.deleteBtn} onPress={() => showDialog(student.std_id)}><MaterialCommunityIcons name="delete-circle" color={COLORS.bootstrapDanger} size={40}/></TouchableOpacity>}
             />
           ))}
 
@@ -181,7 +180,7 @@ const Home = () => {
 
         <Portal>
           <Dialog visible={visibleDialog} onDismiss={hideDialog}>
-            <Dialog.Icon icon="chat-question" size={30} color={ COLORS.danger} />
+            <Dialog.Icon icon="chat-question" size={30} color={COLORS.danger} />
             <Dialog.Content>
               <Text variant="bodyLarge">Are you sure you want to delete this student ?</Text>
             </Dialog.Content>
@@ -222,18 +221,18 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 10,
   },
   linearGradient: {
-    width: '11%',
+    width: '10%',
     height: '70%',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
     marginTop: '1%',
-    marginLeft: '2%'
+    marginLeft: '1%'
   },
   studentListArea: {
     flex: 0.9,
-    margin: '2%',
+    marginTop:'2%',
     marginLeft: '3%'
   },
   modelContainerStyle: {
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bootstrapPrimary,
   },
   deleteBtn: {
-    marginRight: '-3%',
+    
   },
   appBar: {
     backgroundColor: COLORS.titleBarAddStudent,

@@ -51,6 +51,19 @@ const Home = () => {
     setvisibleDialog(false)
   };
 
+  const [visibleDialogUpdate, setvisibleDialogUpdate] = React.useState(false);
+  const showDialogUpdate = () => {
+    setvisibleDialogUpdate(true)
+  };
+  const hideDialogUpdate = () => {
+    setvisibleDialogUpdate(false)
+  };
+
+  const dialogOkBtnPress = () => {
+    hideDialogUpdate();
+    GetAllStudents();
+  }
+
   const GetAllStudents = async () => {
     try {
       const response = await fetch('http://192.168.1.3:3000/api/v1/student/');
@@ -87,7 +100,7 @@ const Home = () => {
         if (responseData.status == '200') {
           console.log(responseData.status);
           hideModal();
-          GetAllStudents();
+          showDialogUpdate();
         }
       });
   }
@@ -211,6 +224,18 @@ const Home = () => {
             <Dialog.Actions>
               <Button onPress={deleteStudent}><Text style={{ color: COLORS.danger }}>Yes</Text></Button>
               <Button onPress={hideDialog}>No</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+
+        <Portal>
+          <Dialog visible={visibleDialogUpdate} onDismiss={hideDialogUpdate}>
+            <Dialog.Icon icon="check-circle" size={30} color={COLORS.bootstrapSuccess} />
+            <Dialog.Content>
+              <Text variant="bodyLarge">Student successfully Updated</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => dialogOkBtnPress()}>Ok</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

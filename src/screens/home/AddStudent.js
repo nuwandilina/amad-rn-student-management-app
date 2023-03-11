@@ -22,8 +22,9 @@ const AddStudent = props => {
   const [dialogText, setdialogText] = React.useState("");
 
   const [visibleDialog, setvisibleDialog] = React.useState(false);
-  const showDialog = () => {
-    setvisibleDialog(true)
+  const showDialog = (display) => {
+    setdialogText(display);
+    setvisibleDialog(true);
   };
   const hideDialog = () => {
     setvisibleDialog(false)
@@ -46,7 +47,7 @@ const AddStudent = props => {
     })
       .then((responseData) => {
         if (responseData.status == '200') {
-          showDialog();
+          showDialog('Saved');
         }
       });
   }
@@ -106,7 +107,7 @@ const AddStudent = props => {
           <Dialog visible={visibleDialog} onDismiss={hideDialog}>
             <Dialog.Icon icon="check-circle" size={30} color={ COLORS.bootstrapSuccess} />
             <Dialog.Content>
-              <Text variant="bodyLarge">Student successfully saved</Text>
+              <Text variant="bodyLarge">Student successfully { dialogText}</Text>
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={() => clearForm()}>Ok</Button>

@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import Moment from 'moment';
 
 type Student = {
   std_id: int,
@@ -74,7 +75,7 @@ const Home = () => {
         std_id: studentObj.std_id,
         name: studentObj.name,
         address: studentObj.address,
-        registered_date: studentObj.registered_date,
+        registered_date: Moment(studentObj.registered_date).format('YYYY-MM-DD'),
         course: studentObj.course,
         image: studentObj.image
       }),
@@ -82,10 +83,13 @@ const Home = () => {
         'Content-type': 'application/json; charset=UTF-8',
       },
     })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
-
-    GetAllStudents();
+      .then((responseData) => {
+        if (responseData.status == '200') {
+          console.log(responseData.status);
+          hideModal();
+          GetAllStudents();
+        }
+      });
   }
 
   const deleteStudent = () => {
@@ -169,25 +173,26 @@ const Home = () => {
               label="Name"
               mode='outlined'
               value={studentObj.name}
-              onChangeText={text => setStudentObj({...studentObj, name : text})}
+              onChangeText={text => setStudentObj({ ...studentObj, name: text })}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Address"
               mode='outlined'
               value={studentObj.address}
-              onChangeText={text => setStudentObj({...studentObj, address: text})}
+              onChangeText={text => setStudentObj({ ...studentObj, address: text })}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Registered Date"
               mode='outlined'
-              value={studentObj.registered_date}
-              onChangeText={text => setStudentObj({...studentObj, registrationDate: text})}
+              //value={Moment(studentObj.registered_date).format('MM/DD/YYYY')}
+              value={Moment(studentObj.registered_date).format('DD/MM/YYYY')}
+              onChangeText={text => setStudentObj({ ...studentObj, registrationDate: text })}
             />
             <TextInput style={styles.addStudentModelTxt}
               label="Course"
               value={studentObj.course}
               mode='outlined'
-              onChangeText={text => setStudentObj({...studentObj, course: text})}
+              onChangeText={text => setStudentObj({ ...studentObj, course: text })}
             />
 
             <Button icon="content-save" mode="contained" style={styles.addStudentBtn} onPress={updateStudent}>

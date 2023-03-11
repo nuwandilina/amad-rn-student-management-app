@@ -19,6 +19,7 @@ const AddStudent = props => {
   const [registrationDate, setRegistrationDate] = React.useState("");
   const [studentcourse, setStudentcourse] = React.useState("");
   const [studentimage, setStudentimage] = React.useState("");
+  const [dialogText, setdialogText] = React.useState("");
 
   const [visibleDialog, setvisibleDialog] = React.useState(false);
   const showDialog = () => {

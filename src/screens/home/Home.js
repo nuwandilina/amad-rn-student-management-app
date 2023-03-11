@@ -33,6 +33,7 @@ const Home = () => {
   const [registrationDateUdate, setRegistrationDateUdate] = React.useState("");
   const [studentcourseUdate, setStudentcourseUdate] = React.useState("");
   const [studentimageUdate, setStudentimageUdate] = React.useState("");
+  const [searchTerm, setsearchTerm] = React.useState("");
 
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
@@ -136,6 +137,23 @@ const Home = () => {
     showModal();
   }
 
+  const SearchStudents = async () => {
+    try {
+      console.log(searchTerm);
+      if (searchTerm == '') {
+        GetAllStudents();
+      } else {
+        const response = await fetch(`http://192.168.1.3:3000/api/v1/student/search/${searchTerm}`);
+        const json = await response.json();
+        setStudents([]);
+        setStudents(json);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  };
+
   return (
     <Provider>
       <View style={styles.homeContainer}>
@@ -144,6 +162,8 @@ const Home = () => {
           <TextInput style={styles.input}
             label="search student"
             mode='outlined'
+            onChangeText={text => setsearchTerm(text)}
+            onKeyPress={text => SearchStudents()}
           />
 
           <LinearGradient

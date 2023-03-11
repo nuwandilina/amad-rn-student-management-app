@@ -28,7 +28,6 @@ const Login = (props) => {
   };
 
   const btnLoginClick = () => {
-    console.log("Im in");
     fetch(`http://192.168.1.3:3000/api/v1/auth`, {
       method: 'POST',
       body: JSON.stringify({

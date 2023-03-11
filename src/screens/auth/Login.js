@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
   TouchableOpacity
@@ -10,21 +9,53 @@ import LinearGradient from 'react-native-linear-gradient';
 import { COLORS, ROUTES } from '../../constants';
 import Logo from '../../assets/icons/LOGO.svg';
 import { useNavigation } from '@react-navigation/native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Portal, Provider, Dialog, Text, Button } from 'react-native-paper';
 
 const Login = (props) => {
   // const {navigation} = props;
   const navigation = useNavigation();
   const [userName, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
-  
+  const [user, setUser] = React.useState([]);
+  const [studentID, setStudentID] = React.useState(0);
+
+  const [visibleDialog, setvisibleDialog] = React.useState(false);
+  const showDialog = () => {
+    setvisibleDialog(true)
+  };
+  const hideDialog = () => {
+    setvisibleDialog(false)
+  };
+
   const btnLoginClick = () => {
-    navigation.navigate(ROUTES.HOME)
-    //navigation.navigate('BottomTabNavigator')
-  }
+    console.log("Im in");
+    fetch(`http://192.168.1.3:3000/api/v1/auth`, {
+      method: 'POST',
+      body: JSON.stringify({
+        username: userName,
+        password: password
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((responseData) => {
+        console.log(responseData.status);
+        console.log(responseData.user);
+        if (responseData.status == '200') {
+          navigation.navigate(ROUTES.HOME)
+        }
+        else {
+          showDialog();
+        }
+      });
+    //.then(r => r.json().then(data => ({ status: r.status, body: data })))
+  };
 
   return (
-    <SafeAreaView style={styles.main}>
+
+    <Provider><SafeAreaView style={styles.main}>
       <View style={styles.container}>
         <View style={styles.wFull}>
           <View style={styles.row}>
@@ -83,9 +114,22 @@ const Login = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+
+      <Portal>
+        <Dialog visible={visibleDialog} onDismiss={hideDialog}>
+          <Dialog.Icon icon="alert-circle" size={30} color={COLORS.danger} />
+          <Dialog.Content>
+            <Text variant="bodyLarge">Invalid username or password</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Ok</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+
+    </SafeAreaView></Provider>
   );
-};
+}
 
 export default Login;
 

@@ -31,7 +31,7 @@ const AddStudent = props => {
   };
 
   const saveStudent = () => {
-    fetch('http://192.168.1.3:3000/api/v1/student/', {
+    fetch('http://192.168.1.3:3030/api/v1/student/', {
       method: 'POST',
       body: JSON.stringify({
         std_id: 0,

@@ -67,7 +67,7 @@ const Home = () => {
 
   const GetAllStudents = async () => {
     try {
-      const response = await fetch('http://192.168.1.3:3000/api/v1/student/');
+      const response = await fetch('http://192.168.1.3:3030/api/v1/student/');
       const json = await response.json();
       setStudents([]);
       setStudents(json);
@@ -83,7 +83,7 @@ const Home = () => {
 
 
   const updateStudent = () => {
-    fetch(`http://192.168.1.3:3000/api/v1/student/${studentObj.std_id}`, {
+    fetch(`http://192.168.1.3:3030/api/v1/student/${studentObj.std_id}`, {
       method: 'PUT',
       body: JSON.stringify({
         std_id: studentObj.std_id,
@@ -107,7 +107,7 @@ const Home = () => {
   }
 
   const deleteStudent = () => {
-    fetch(`http://192.168.1.3:3000/api/v1/student/${studentID}`, {
+    fetch(`http://192.168.1.3:3030/api/v1/student/${studentID}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -123,7 +123,7 @@ const Home = () => {
   }
 
   const GetStudentByID = async (studentIDPrm) => {
-    fetch(`http://192.168.1.3:3000/api/v1/student/${studentIDPrm}`)
+    fetch(`http://192.168.1.3:3030/api/v1/student/${studentIDPrm}`)
       .then((response) => response.json())
       .then((json) => {
         setStudentObj(json);
@@ -143,7 +143,7 @@ const Home = () => {
       if (searchTerm == '') {
         GetAllStudents();
       } else {
-        const response = await fetch(`http://192.168.1.3:3000/api/v1/student/search/${searchTerm}`);
+        const response = await fetch(`http://192.168.1.3:3030/api/v1/student/search/${searchTerm}`);
         const json = await response.json();
         setStudents([]);
         setStudents(json);
@@ -171,7 +171,6 @@ const Home = () => {
             style={styles.linearGradient}
             start={{ y: 0.0, x: 0.0 }}
             end={{ y: 1.0, x: 0.0 }}>
-            {/******************** LOGIN BUTTON *********************/}
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => navigation.navigate('AddStudent')}

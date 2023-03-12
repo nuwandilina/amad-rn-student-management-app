@@ -28,7 +28,7 @@ const Login = (props) => {
   };
 
   const btnLoginClick = () => {
-    fetch(`http://192.168.1.3:3000/api/v1/auth`, {
+    fetch(`http://192.168.1.3:3030/api/v1/auth`, {
       method: 'POST',
       body: JSON.stringify({
         username: userName,
@@ -82,7 +82,6 @@ const Login = (props) => {
               style={styles.linearGradient}
               start={{ y: 0.0, x: 0.0 }}
               end={{ y: 1.0, x: 0.0 }}>
-              {/******************** LOGIN BUTTON *********************/}
               <TouchableOpacity
                 onPress={btnLoginClick}
                 activeOpacity={0.7}
@@ -92,7 +91,6 @@ const Login = (props) => {
             </LinearGradient>
           </View>
 
-          {/***************** FORGOT PASSWORD BUTTON *****************/}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate(ROUTES.FORGOT_PASSWORD, {
@@ -106,7 +104,6 @@ const Login = (props) => {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}> Don't have an account? </Text>
-          {/******************** REGISTER BUTTON *********************/}
           <TouchableOpacity
             onPress={() => navigation.navigate(ROUTES.REGISTER)}>
             <Text style={styles.signupBtn}>Request</Text>
@@ -162,18 +159,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    // borderWidth: 1,
-    // borderColor: COLORS.grayLight,
-    // padding: 15,
-    // marginVertical: 10,
-    // borderRadius: 5,
-    // height: 55,
-    // paddingVertical: 0,
     marginVertical: 5,
     borderTopLeftRadius: 10,
     borderTopEndRadius: 10,
   },
-  // Login Btn Styles
   loginBtnWrapper: {
     height: 55,
     marginTop: 12,
@@ -208,7 +197,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 15,
   },
-  // footer
   footer: {
     position: 'absolute',
     bottom: 20,
@@ -223,7 +211,6 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontWeight: 'bold',
   },
-  // utils
   wFull: {
     width: '100%',
   },
